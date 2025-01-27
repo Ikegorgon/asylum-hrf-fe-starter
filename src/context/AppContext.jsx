@@ -5,36 +5,31 @@ import { useLocalStorage } from '../hooks/useLocalStorage.js';
 
 const AppContext = createContext({});
 
-/**
- * TODO: Ticket 2:
- * - Use axios to fetch the data
- * - Store the data
- * - Populate the graphs with the stored data
- */
 const useAppContextProvider = () => {
   const [graphData, setGraphData] = useState(testData);
   const [isDataLoading, setIsDataLoading] = useState(false);
-
   useLocalStorage({ graphData, setGraphData });
-
-  const getFiscalData = () => {
-    // TODO: Replace this with functionality to retrieve the data from the fiscalSummary endpoint
-    const fiscalDataRes = testData;
-    return fiscalDataRes;
-  };
-
-  const getCitizenshipResults = async () => {
-    // TODO: Replace this with functionality to retrieve the data from the citizenshipSummary endpoint
-    const citizenshipRes = testData.citizenshipResults;
-    return citizenshipRes;
-  };
-
+  
   const updateQuery = async () => {
     setIsDataLoading(true);
   };
 
-  const fetchData = async () => {
-    // TODO: fetch all the required data and set it to the graphData state
+  const fetchData = () => {
+    // Updates graphData with New Data from API Endpoints
+    let newData = {};
+    try {
+      axios.get('https://hrf-asylum-be-b.herokuapp.com/cases/fiscalSummary')
+        .then(res => {
+          newData = res.data;
+        })
+      axios.get('https://hrf-asylum-be-b.herokuapp.com/cases/citizenshipSummary')
+        .then(res => {
+          setGraphData({...newData, citizenshipResults: res.data});
+          setIsDataLoading(false);
+        })
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const clearQuery = () => {
