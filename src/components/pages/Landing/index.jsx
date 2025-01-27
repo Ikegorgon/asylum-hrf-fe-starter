@@ -4,22 +4,10 @@ import barGraph from '../../../assets/bar-graph.png';
 import paperStack from '../../../assets/paper-stack.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useDownloadData } from '../../../hooks/useDownloadData.js';
-// import {decodeBase64} from '../../../utils/decodeBase64.js';
 
 export const LandingPage = () => {
   const navigate = useNavigate();
   const { downloadCSV } = useDownloadData();
-
-  const scrollToTop = () => {
-    let scrollStep = -window.scrollY / 20; // Adjust the divisor for speed
-    let scrollInterval = setInterval(() => {
-      if (window.scrollY === 0) {
-        clearInterval(scrollInterval);
-      } else {
-        window.scrollBy(0, scrollStep);
-      }
-    }, 10); // Adjust the interval time for smoothness
-  };
 
   const handleViewTheData = () => {
     // Navitages User to the Graphs Page
